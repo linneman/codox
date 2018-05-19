@@ -103,14 +103,45 @@
    :metadata     {}
    :themes       [:default]})
 
+
+(comment
+  ;; sample inject edn
+  [{:name 'server.app.core
+    :doc "documentation for server.app.tstnamespace"
+    :author "ol"
+    :publics [{:name "function"
+               :file "/Users/ol/Entwicklung/clojure/pub-oss/src/pub_oss/core.clj"
+               :line 100
+               :type :var
+               :arglists [['a 'b 'c]]
+               :doc "this is a function"
+               :members []}]}
+   {:name 'server.app.test
+    :doc "documentation for server.app.tstnamespace"
+    :author "ol"
+    :publics [{:name "test-function"
+               :file "/Users/ol/Entwicklung/clojure/pub-oss/src/pub_oss/core-test.clj"
+               :line 100
+               :type :var
+               :arglists [['a 'b 'c 'd]]
+               :doc "this is a test function"
+               :members []}]}])
+
+
 (defn generate-docs
   "Generate documentation from source files."
   ([]
      (generate-docs {}))
   ([options]
      (let [options    (merge defaults options)
+           inject-ns-edn-file (:inject-ns-edn-file options)
            write-fn   (writer options)
            namespaces (read-namespaces options)
+           namespaces (if inject-ns-edn-file
+                        (apply conj
+                               (load-file inject-ns-edn-file)
+                               namespaces)
+                        namespaces)
            documents  (read-documents options)]
        (write-fn (assoc options
                         :namespaces namespaces

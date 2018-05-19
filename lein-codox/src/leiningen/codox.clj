@@ -25,7 +25,7 @@
                   project)
         options (get-options project)]
     (eval/eval-in-project
-     (deps/add-if-missing project '[codox "0.10.3"])
+     (deps/add-if-missing project '[org.clojars.ol42/codox "0.10.3-with-inject-option-0.1"])
      `(codox.main/generate-docs '~options)
      `(require 'codox.main))
     (main/info "Generated HTML docs in" (:output-path options))))
