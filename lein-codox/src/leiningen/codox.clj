@@ -25,7 +25,7 @@
                   project)
         options (get-options project)]
     (eval/eval-in-project
-     (deps/add-if-missing project '[codox "0.10.7"])
+     (deps/add-if-missing project '[org.clojars.ol42/codox "0.10.7-with-inject-option-0.4"])
      `(do (codox.main/generate-docs '~options)
           (shutdown-agents))
      `(require 'codox.main))

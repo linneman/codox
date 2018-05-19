@@ -12,7 +12,7 @@ Include the following plugin in your `project.clj` file or your global
 profile:
 
 ```clojure
-:plugins [[lein-codox "0.10.7"]]
+:plugins [[org.clojars.ol42/lein-codox "0.10.7-with-inject-option-0.4"]]
 ```
 
 Then run:
@@ -28,7 +28,7 @@ This will generate API documentation in the "target/doc" subdirectory
 
 Add boot-codox to your build.boot dependencies and require the namespace:
 ```
-(set-env! :dependencies '[[boot-codox "0.10.7" :scope "test"]])
+(set-env! :dependencies '[[boot-codox "0.10.7-with-inject-option-0.4" :scope "test"]])
 (require '[codox.boot :refer [codox]])
 ```
 
@@ -95,6 +95,46 @@ ClojureScript by setting the `:language` key:
 
 ```clojure
 :codox {:language :clojurescript}
+```
+
+It is also possible to inject externally generated documentation data structures
+as edn file. This is e.g. requrired to integrate documentation from 3rd party
+languages such as Pixie which is quite similar to clojure but Pixie code
+can neither be parsed by Clojure nor ClojureScript.
+
+```clojure
+:codox {:inject-ns-edn-file <edn file name>}
+```
+The following snippet gives an example about the strucute of injected edn data:
+
+```clojure
+[{:name 'server.app.core
+    :doc "documentation for server.app.tstnamespace"
+    :author "ol"
+    :publics [{:name 'function
+               :file "/Users/ol/Entwicklung/clojure/pub-oss/src/pub_oss/core.clj"
+               :line 100
+               :type :var
+               :arglists [['a 'b 'c]]
+               :doc "this is a function"
+               :members []}]}
+   {:name 'server.app.test
+    :doc "documentation for server.app.tstnamespace"
+    :author "ol"
+    :publics [{:name 'test-function
+               :file "/Users/ol/Entwicklung/clojure/pub-oss/src/pub_oss/core-test.clj"
+               :line 100
+               :type :var
+               :arglists [['a 'b 'c 'd]]
+               :doc "this is a test function"
+               :members []}]}]
+```
+
+Furthermore the contents of the installation instructions section can be overwriten
+by:
+
+```clojure
+:codox {:installation (list [:h2 "Installation] ...}
 ```
 
 ### Source Files
